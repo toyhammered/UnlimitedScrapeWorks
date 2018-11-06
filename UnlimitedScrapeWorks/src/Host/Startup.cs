@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using UnlimitedScrapeWorks.src.Providers;
+using UnlimitedScrapeWorks.src.Sites;
 
 namespace UnlimitedScrapeWorks
 {
@@ -26,6 +28,8 @@ namespace UnlimitedScrapeWorks
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddTransient<IMangaDexProvider, MangaDexProvider>();
+            services.AddTransient<IMangaDexSite, MangaDexSite>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

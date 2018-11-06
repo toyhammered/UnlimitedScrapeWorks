@@ -1,27 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
-  <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Folder Include="src\" />
-    <Folder Include="src\Api\" />
-    <Folder Include="src\Host\" />
-    <Folder Include="src\Host\Properties\" />
-    <Folder Include="src\Host\wwwroot\" />
-    <Folder Include="src\Providers\" />
-    <Folder Include="src\Sites\" />
-    <Folder Include="src\ContractModels\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="src\Host\Properties\launchSettings.json">
-      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.1</TargetFramework>
+    </PropertyGroup>
+    <ItemGroup>
+        <Folder Include="src\" />
+        <Folder Include="src\Api\" />
+        <Folder Include="src\Host\" />
+        <Folder Include="src\Host\Properties\" />
+        <Folder Include="src\Host\wwwroot\" />
+        <Folder Include="src\Providers\" />
+        <Folder Include="src\Sites\" />
+        <Folder Include="src\ContractModels\" />
+        <Folder Include="src\Types\" />
+        <Folder Include="src\ContractModels\MangaDex\" />
+        <Folder Include="src\Libs\" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.App" />
+        <PackageReference Include="HtmlAgilityPack" Version="1.8.9" />
+    </ItemGroup>
+    <ItemGroup>
+        <Content Update="src\Host\Properties\launchSettings.json">
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </Content>
+    </ItemGroup>
 </Project>
