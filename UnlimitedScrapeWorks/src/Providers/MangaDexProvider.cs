@@ -1,103 +1,45 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using UnlimitedScrapeWorks.src.ContractModels.MangaDex;
+using UnlimitedScrapeWorks.src.Libs.MangaDex;
 using UnlimitedScrapeWorks.src.Sites;
 
 namespace UnlimitedScrapeWorks.src.Providers
 {
     public class MangaDexProvider : IMangaDexProvider
     {
-        //private readonly int TOTAL = 32000;
         private readonly IMangaDexSite _site;
 
-        public int AdditionalPages { get; set; }
-        public string TitleSlug { get; set; }
-        public HtmlDocument Page { get; set; }
-
-
-        public MangaDexProvider(
-            IMangaDexSite site
-        )
+        public MangaDexProvider(IMangaDexSite site)
         {
             _site = site ?? throw new ArgumentNullException(nameof(site));
-            AdditionalPages = 0;
-            TitleSlug = null;
         }
 
-        public async void GetAll()
+        public async Task<string> GetAll()
         {
-            // TODO: figure out how to loop based on number and batch by 400
-            this.Page = await _site.GetAll(2);
+            // TODO: add looping here, we need to catch and just skip errors
+            MangaDexMangaResponse manga;
 
-            this.TitleSlug = FindTitleSlug();
-
-            // TODO: check if you need to async this.
-            var manga = ParseSitePage();
-
-        }
-
-        public MangaDexMangaResponse ParseSitePage()
-        {
-            return new MangaDexMangaResponse()
+            try
             {
-                Title = SetTitle()
-            };
-        }
+                // TODO: figure out how to loop based on number and batch by 400
+                var page = await _site.GetAll(2);
 
-        public MangaTitle SetTitle()
-        {
-            return new MangaTitle()
-            {
-                Name = FindMangaName(),
-                Origin = FindMangaOrigin()
-            };
-        }
 
-        public string FindTitleSlug()
-        {
-            var href = Root().SelectSingleNode(@"//ul[contains(@class, 'edit')]")
-                             .Descendants("li").First()
-                             .Descendants("a").First()
-                             .GetAttributeValue("href", null);
+                // TODO: check if you need to async this.
+                manga = await new MangaParser(page).Process();
+                //manga.TotalChapters = "";
 
-            // TODO: maybe think of a generic way to handle this and throw errors
-            // just remember to make sure your errors are very specific because
-            // I need to know what failed.
-            if (String.IsNullOrEmpty(href))
-            {
-                throw new Exception();
             }
-            return ParsedTitleSlug(href);
-        }
+            catch (Exception ex)
+            {
 
-        public string ParsedTitleSlug(string href)
-        {
-            return href.Split("/")[3];
-        }
+            }
 
-        public string FindMangaName()
-        {
-            return CardHeader().InnerText.Trim();
-        }
-
-
-        public string FindMangaOrigin()
-        {
-            return CardHeader().Descendants("img")
-                               .First()
-                               .GetAttributeValue("title", null);
-        }
-
-        private HtmlNode CardHeader()
-        {
-            return Root().SelectSingleNode(@"//h6[@class='card-header']");
-        }
-
-        private HtmlNode Root()
-        {
-            return Page.DocumentNode;
+            return "Success";
         }
     }
 }

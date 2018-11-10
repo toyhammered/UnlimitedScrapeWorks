@@ -15,6 +15,7 @@
         <Folder Include="src\Types\" />
         <Folder Include="src\ContractModels\MangaDex\" />
         <Folder Include="src\Libs\" />
+        <Folder Include="src\Libs\MangaDex\" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.App" />

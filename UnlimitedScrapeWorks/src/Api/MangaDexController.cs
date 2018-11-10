@@ -23,21 +23,18 @@ namespace UnlimitedScrapeWorks.Controllers
 
         // GET api/mangadex/all
         [HttpGet("all")]
-        public void GetAll()
+        public Task<string> GetAll()
         {
 
             try
             {
-                _provider.GetAll();
+                return _provider.GetAll();
             }
             catch (Exception ex)
             {
-
+                return null;
             }
-            //catch (Exception ex)
-            //{
 
-            //}
         }
     }
 }
