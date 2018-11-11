@@ -5,7 +5,7 @@ namespace UnlimitedScrapeWorks.src.ContractModels.MangaDex
 {
     public class MangaDexMangaResponse
     {
-        public String Id { get; set; }
+        public int Id { get; set; }
 
         public MangaTitle Title { get; set; }
         public List<string> AltTitles { get; set; }
@@ -22,7 +22,7 @@ namespace UnlimitedScrapeWorks.src.ContractModels.MangaDex
         public Boolean Hentai { get; set; }
 
         public Dictionary<string, string> ExternalLinks { get; set; }
-        public List<MangaChapters> Chapters { get; set; }
+        public List<MangaChapter> Chapters { get; set; }
     }
 
     public class MangaTitle
@@ -32,12 +32,12 @@ namespace UnlimitedScrapeWorks.src.ContractModels.MangaDex
         public String Origin { get; set; }
     }
 
-    public class MangaChapters
+    public class MangaChapter
     {
         //private string _uploadDate;
 
-        public List<string> AltTitles { get; set; }
-        public int Volume { get; set; }
+        public Dictionary<string, string> AltTitles { get; set; }
+        public int? Volume { get; set; }
         public int Chapter { get; set; }
         public String UploadDate { get; set; }
         //public String UploadDate

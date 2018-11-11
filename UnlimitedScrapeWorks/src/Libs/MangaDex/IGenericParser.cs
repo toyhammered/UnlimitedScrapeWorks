@@ -7,8 +7,8 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
     {
         HtmlNode Root();
         HtmlNode CardBodyMangaDetails();
-        HtmlNode CardBodymangaImage();
-        HtmlNode CardBodyMangaDetail();
+        HtmlNode CardBodyMangaImage();
+        HtmlNode CardBodyMangaDetail(string detailType);
         HtmlNode CardBody();
         HtmlNode CardHeader();
         HtmlNode ChaptersNav();

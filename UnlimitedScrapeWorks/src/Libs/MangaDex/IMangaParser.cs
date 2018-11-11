@@ -7,6 +7,11 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
 {
     public interface IMangaParser
     {
+        Task<MangaDexMangaResponse> Process();
+
+        string TitleSlug { get; set; }
+        int Id { get; }
+
         string FindId();
 
         MangaTitle SetTitle();

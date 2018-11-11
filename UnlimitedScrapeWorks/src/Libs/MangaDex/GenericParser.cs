@@ -1,10 +1,11 @@
 ﻿using System;
 using HtmlAgilityPack;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace UnlimitedScrapeWorks.src.Libs.MangaDex
 {
-    public class GenericParser
+    public class GenericParser : IGenericParser
     {
         HtmlDocument Page { get; }
 
@@ -13,8 +14,7 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
             this.Page = page;
         }
 
-
-        HtmlNode Root()
+        public HtmlNode Root()
         {
             return Page.DocumentNode;
         }
@@ -50,6 +50,18 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
         public HtmlNode ChaptersNav()
         {
             return Root().SelectSingleNode(@"//ul[contains(@class, 'edit')]/li[1]/a[1]");
+        }
+
+        public List<HtmlNode> Chapters()
+        {
+            var chapterNodes = Root().SelectSingleNode(@"//div[@id='content']/div[contains(@class, 'edit')]/div")
+                                     .ChildNodes
+                                     .Where(node => node.Name.Equals("div"))
+                                     .ToList();
+
+            // Remove the first node because it just holds images and no content
+            chapterNodes.RemoveAt(0);
+            return chapterNodes;
         }
     }
 }

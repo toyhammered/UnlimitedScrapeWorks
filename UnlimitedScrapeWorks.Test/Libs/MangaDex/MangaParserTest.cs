@@ -1,10 +1,6 @@
 ﻿using System;
 using Xunit;
 using HtmlAgilityPack;
-using UnlimitedScrapeWorks.src.Providers;
-using UnlimitedScrapeWorks.src.Sites;
-using UnlimitedScrapeWorks.src.ContractModels.MangaDex;
-using System.Collections.Generic;
 using UnlimitedScrapeWorks.src.Libs.MangaDex;
 
 namespace UnlimitedScrapeWorks.Test.Libs.MangaDex
@@ -17,7 +13,7 @@ namespace UnlimitedScrapeWorks.Test.Libs.MangaDex
         public MangaParserTest()
         {
             _web.Load(@"Fixtures/MangaDex/ZippyZiggy.html");
-            _parser = new MangaParser(_web);
+            _parser = new MangaParser(_web, 2);
         }
 
         [Fact]
@@ -74,7 +70,6 @@ namespace UnlimitedScrapeWorks.Test.Libs.MangaDex
         [Fact]
         public void FindThumbnailTest()
         {
-            _parser.MangaId = "2";
             Assert.Equal("https://mangadex.org/images/manga/2.jpg", _parser.FindThumbnail());
         }
 

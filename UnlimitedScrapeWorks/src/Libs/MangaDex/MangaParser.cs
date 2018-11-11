@@ -9,28 +9,26 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
 {
     public class MangaParser : IMangaParser
     {
-        //private readonly int TOTAL = 32000;
         readonly string THUMBNAIL_URL = "https://mangadex.org/images/manga/";
 
         GenericParser _genericParser { get; set; }
         public string TitleSlug { get; set; }
-        public string MangaId { get; set; }
-        public int AdditionalPages { get; set; }
+        public int Id { get; }
 
-        public MangaParser(HtmlDocument page)
+        public MangaParser(HtmlDocument page, int mangaId)
         {
             _genericParser = new GenericParser(page);
+            Id = mangaId;
         }
 
         public async Task<MangaDexMangaResponse> Process()
         {
             this.TitleSlug = FindSlug();
-            this.MangaId = FindId();
 
             return await Task.Run(
                 () => new MangaDexMangaResponse()
                 {
-                    Id = FindId(),
+                    Id = Id,
                     Title = SetTitle(),
                     AltTitles = FindAltTitles(),
                     GenreTags = FindGenreTags(),
@@ -130,7 +128,7 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
 
         public string FindThumbnail()
         {
-            return $"{THUMBNAIL_URL}{MangaId}.jpg";
+            return $"{THUMBNAIL_URL}{Id}.jpg";
         }
 
         public string FindPublishStatus()
@@ -166,7 +164,6 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
         public int FindTotalChapters()
         {
             int totalChapters;
-            string temp;
 
             try
             {
@@ -177,12 +174,6 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
                                                .First(node => node.FirstChild.GetAttributeValue("title", "").Equals("Total chapters"))
                                                .InnerText.Trim()
                 );
-
-                temp = _genericParser.CardBodyMangaDetail("Stats").SelectNodes(@"div[2]/ul/li")
-                                               .ToList()
-                                               .First(node => node.FirstChild.GetAttributeValue("title", "").Equals("Total chapters"))
-                                               .InnerText.Trim();
-
             }
             catch (Exception ex)
             {
@@ -190,7 +181,7 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
             }
 
 
-            SetAdditionalPages(totalChapters);
+            //SetAdditionalPages(totalChapters);
             return totalChapters;
         }
 
@@ -217,12 +208,6 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
             }
 
             return results;
-        }
-
-        public void SetAdditionalPages(int totalChapters)
-        {
-            decimal result = totalChapters / 100;
-            this.AdditionalPages = result.Equals(0) ? 0 : Convert.ToInt32(Math.Ceiling(result));
         }
     }
 }

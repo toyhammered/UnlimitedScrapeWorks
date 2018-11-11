@@ -11,6 +11,7 @@ namespace UnlimitedScrapeWorks.src.Providers
 {
     public class MangaDexProvider : IMangaDexProvider
     {
+        private readonly int TOTAL = 2;
         private readonly IMangaDexSite _site;
 
         public MangaDexProvider(IMangaDexSite site)
@@ -21,22 +22,25 @@ namespace UnlimitedScrapeWorks.src.Providers
         public async Task<string> GetAll()
         {
             // TODO: add looping here, we need to catch and just skip errors
-            MangaDexMangaResponse manga;
-
-            try
+            for (int i = 2; i <= TOTAL; i++)
             {
-                // TODO: figure out how to loop based on number and batch by 400
-                var page = await _site.GetAll(2);
+                MangaDexMangaResponse manga;
+
+                try
+                {
+                    // TODO: figure out how to loop based on number and batch by 400
+                    var page = await _site.GetAll(i);
 
 
-                // TODO: check if you need to async this.
-                manga = await new MangaParser(page).Process();
-                //manga.TotalChapters = "";
+                    // TODO: check if you need to async this.
+                    manga = await new MangaParser(page, i).Process();
+                    manga.Chapters = await new ChapterParser(_site, page, i, manga.Title.Slug, manga.TotalChapters).Process();
 
-            }
-            catch (Exception ex)
-            {
+                }
+                catch (Exception ex)
+                {
 
+                }
             }
 
             return "Success";

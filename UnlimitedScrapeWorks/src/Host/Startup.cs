@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using UnlimitedScrapeWorks.src.Libs.MangaDex;
 using UnlimitedScrapeWorks.src.Providers;
 using UnlimitedScrapeWorks.src.Sites;
 
@@ -29,7 +30,10 @@ namespace UnlimitedScrapeWorks
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddTransient<IMangaDexProvider, MangaDexProvider>();
-            services.AddTransient<IMangaDexSite, MangaDexSite>();
+            services.AddSingleton<IMangaDexSite, MangaDexSite>();
+            services.AddTransient<IGenericParser, GenericParser>();
+            services.AddTransient<IMangaParser, MangaParser>();
+            services.AddTransient<IChapterParser, ChapterParser>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
