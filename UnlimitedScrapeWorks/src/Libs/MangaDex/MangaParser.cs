@@ -180,8 +180,6 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
                 totalChapters = 0;
             }
 
-
-            //SetAdditionalPages(totalChapters);
             return totalChapters;
         }
 

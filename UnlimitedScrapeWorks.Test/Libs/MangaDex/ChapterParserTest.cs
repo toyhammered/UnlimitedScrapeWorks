@@ -15,6 +15,11 @@ namespace UnlimitedScrapeWorks.Test.Libs.MangaDex
 
         public ChapterParserTest()
         {
+
+        }
+
+        public void ZippyZiggy()
+        {
             _web.Load(@"Fixtures/MangaDex/ZippyZiggy.html");
             _parser = new ChapterParser(new MangaDexSite(), _web, 2, "zippy-ziggy", 172);
             // Will need to set this for only certain tests
@@ -26,15 +31,17 @@ namespace UnlimitedScrapeWorks.Test.Libs.MangaDex
         [InlineData(1, "Dreams Come True!")]
         public void FindTitleTest(int rowNumber, string title)
         {
+            ZippyZiggy();
             var node = _genericParser.Chapters()[rowNumber];
             Assert.Equal(title, _parser.ChapterRowDataValue(node, "title"));
         }
 
         [Theory]
-        [InlineData(0, "Polish")]
-        [InlineData(1, "English")]
+        [InlineData(0, "polish")]
+        [InlineData(1, "english")]
         public void FindLanguageTest(int rowNumber, string language)
         {
+            ZippyZiggy();
             var node = _genericParser.Chapters()[rowNumber];
             Assert.Equal(language, _parser.FindLanguage(node));
         }
@@ -42,6 +49,7 @@ namespace UnlimitedScrapeWorks.Test.Libs.MangaDex
         [Fact]
         public void FindVolumeTest()
         {
+            ZippyZiggy();
             var node = _genericParser.Chapters()[0];
             Assert.Equal(11, _parser.FindVolume(node));
         }
@@ -49,6 +57,7 @@ namespace UnlimitedScrapeWorks.Test.Libs.MangaDex
         [Fact]
         public void FindChapterTest()
         {
+            ZippyZiggy();
             var node = _genericParser.Chapters()[0];
             Assert.Equal(86, _parser.FindChapter(node));
         }
@@ -56,8 +65,9 @@ namespace UnlimitedScrapeWorks.Test.Libs.MangaDex
         [Fact]
         public void FindUploadDateTest()
         {
+            ZippyZiggy();
             var node = _genericParser.Chapters()[0];
-            Assert.Equal("1519465023", _parser.FindUploadDate(node));
+            Assert.Equal("2/24/18", _parser.FindUploadDate(node));
         }
 
     }

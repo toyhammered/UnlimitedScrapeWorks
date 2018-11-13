@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using UnlimitedScrapeWorks.src.ContractModels.MangaDex;
@@ -99,8 +100,8 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
         public Dictionary<string, string> FindAltTitles(HtmlNode node)
         {
             var altTitles = new Dictionary<string, string>();
-            var title = ChapterRowDataValue(node, "title");
             var language = FindLanguage(node);
+            var title = ChapterRowDataValue(node, "title");
 
             altTitles.Add(language, title);
 
@@ -114,8 +115,15 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
 
         public string FindLanguage(HtmlNode node)
         {
-            return node.SelectSingleNode("div/div/div[contains(@class, 'chapter-list-flag')]/img")
-                       .GetAttributeValue("title", null);
+            try
+            {
+                return node.SelectSingleNode("div/div/div[contains(@class, 'chapter-list-flag')]/img")
+                           .GetAttributeValue("title", null).ToLower();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public int? FindVolume(HtmlNode node)
@@ -144,7 +152,15 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
 
         public string FindUploadDate(HtmlNode node)
         {
-            return ChapterRowDataValue(node, "timestamp");
+            try
+            {
+                long converted = Convert.ToInt64(ChapterRowDataValue(node, "timestamp"));
+                return DateTimeOffset.FromUnixTimeSeconds(converted).ToString().Split(" ").First();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public int CalculateAdditionalPages(int mangaTotalChapters)
