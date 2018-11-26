@@ -74,7 +74,7 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
                 chapterNodes.RemoveAt(0);
                 return chapterNodes;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return new List<HtmlNode>();
             }

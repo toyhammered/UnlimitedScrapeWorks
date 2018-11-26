@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using UnlimitedScrapeWorks.src.ContractModels.MangaDex;
@@ -76,7 +77,8 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
 
         public string FindName()
         {
-            return _genericParser.CardHeader().InnerText.Trim();
+            var unformattedName = _genericParser.CardHeader().InnerText;
+            return Regex.Replace(unformattedName, @"\s{2,10}H", "").Trim();
         }
 
 
@@ -134,32 +136,69 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
 
         public string FindPublishStatus()
         {
-            return _genericParser.CardBodyMangaDetail("Pub. status").SelectSingleNode(@"div[2]")
-                                                     .InnerText.Trim();
+            try
+            {
+                return _genericParser.CardBodyMangaDetail("Pub. status").SelectSingleNode(@"div[2]")
+                                     .InnerText.Trim();
+            }
+            catch (MissingMangaDetailException)
+            {
+                return null;
+            }
         }
 
         public string FindDemographic()
         {
-            return _genericParser.CardBodyMangaDetail("Demographic").SelectSingleNode(@"div[2]/span/a")
-                                                .InnerText.Trim();
+            try
+            {
+                return _genericParser.CardBodyMangaDetail("Demographic").SelectSingleNode(@"div[2]/span/a")
+                                     .InnerText.Trim();
+            }
+            catch (MissingMangaDetailException)
+            {
+                return null;
+            }
         }
 
         public string FindAuthor()
         {
-            return _genericParser.CardBodyMangaDetail("Author").SelectSingleNode(@"div[2]/a")
-                                                .InnerText.Trim();
+            try
+            {
+                return _genericParser.CardBodyMangaDetail("Author").SelectSingleNode(@"div[2]/a")
+                                     .InnerText.Trim();
+            }
+            catch (MissingMangaDetailException)
+            {
+                return null;
+            }
+
         }
 
         public string FindArtist()
         {
-            return _genericParser.CardBodyMangaDetail("Artist").SelectSingleNode(@"div[2]/a")
-                                                .InnerText.Trim();
+            try
+            {
+                return _genericParser.CardBodyMangaDetail("Artist").SelectSingleNode(@"div[2]/a")
+                                     .InnerText.Trim();
+            }
+            catch (MissingMangaDetailException)
+            {
+                return null;
+            }
         }
 
         public string FindDescription()
         {
-            return _genericParser.CardBodyMangaDetail("Description").SelectSingleNode(@"div[2]")
-                                                     .InnerText.Trim();
+            try
+            {
+                var unformattedDescription = _genericParser.CardBodyMangaDetail("Description").SelectSingleNode(@"div[2]")
+                                                           .InnerText.Trim();
+                return unformattedDescription == "" ? null : unformattedDescription;
+            }
+            catch (MissingMangaDetailException)
+            {
+                return null;
+            }
         }
 
         public int FindTotalChapters()
@@ -211,7 +250,11 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
                     }
                 }
             }
-            catch (MissingMangaDetailException) { }
+            catch (MissingMangaDetailException)
+            {
+
+            }
+
 
             return results;
         }

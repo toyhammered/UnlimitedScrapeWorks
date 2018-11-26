@@ -58,6 +58,20 @@ namespace UnlimitedScrapeWorks.Test.Libs.MangaDex
         }
 
         [Fact]
+        public void FindNameTest()
+        {
+            ZippyZiggy();
+            Assert.Equal("Zippy Ziggy", _parser.FindName());
+        }
+
+        [Fact]
+        public void FindNameTest_Hentai()
+        {
+            FutariNoMeikyuuOujo();
+            Assert.Equal("Futari no Meikyuu Oujo", _parser.FindName());
+        }
+
+        [Fact]
         public void FindAltTitlesTest_CorrectAmount()
         {
             ZippyZiggy();
@@ -147,7 +161,7 @@ namespace UnlimitedScrapeWorks.Test.Libs.MangaDex
         public void FindDescriptionTest_NotPresent()
         {
             FutariNoMeikyuuOujo();
-            Assert.Equal("", _parser.FindDescription());
+            Assert.Null(_parser.FindDescription());
         }
 
         [Fact]
