@@ -15,10 +15,25 @@ namespace UnlimitedScrapeWorks.Test.Libs.MangaDex
 
         }
 
-        public void ZippyZiggy()
+        private void ZippyZiggy()
         {
             _web.Load(@"Fixtures/MangaDex/ZippyZiggy.html");
             _parser = new MangaParser(_web, 2);
+        }
+
+        // Missing information
+        private void KimiJaNakyaDameNanda()
+        {
+            _web.Load(@"Fixtures/MangaDex/KimiJaNakyaDameNanda.html");
+            _parser = new MangaParser(_web, 2001);
+
+        }
+
+        // Hentai
+        private void FutariNoMeikyuuOujo()
+        {
+            _web.Load(@"Fixtures/MangaDex/FutariNoMeikyuuOujo.html");
+            _parser = new MangaParser(_web, 31238);
         }
 
         [Fact]
@@ -64,6 +79,13 @@ namespace UnlimitedScrapeWorks.Test.Libs.MangaDex
         {
             ZippyZiggy();
             Assert.Equal(6, _parser.FindGenreTags().Count);
+        }
+
+        [Fact]
+        public void FindGenreTagsTest_NotPresent()
+        {
+            FutariNoMeikyuuOujo();
+            Assert.Empty(_parser.FindGenreTags());
         }
 
         [Theory]
@@ -115,10 +137,17 @@ namespace UnlimitedScrapeWorks.Test.Libs.MangaDex
         }
 
         [Fact]
-        public void FindDescriptionTest()
+        public void FindDescriptionTest_Present()
         {
             ZippyZiggy();
             Assert.Contains("Reputation is everything in", _parser.FindDescription());
+        }
+
+        [Fact]
+        public void FindDescriptionTest_NotPresent()
+        {
+            FutariNoMeikyuuOujo();
+            Assert.Equal("", _parser.FindDescription());
         }
 
         [Fact]
@@ -129,10 +158,31 @@ namespace UnlimitedScrapeWorks.Test.Libs.MangaDex
         }
 
         [Fact]
+        public void FindTotalChaptersTest_NoChapters()
+        {
+            KimiJaNakyaDameNanda();
+            Assert.Equal(0, _parser.FindTotalChapters());
+        }
+
+        [Fact]
         public void FindHentaiTest_NotPresent()
         {
             ZippyZiggy();
             Assert.False(_parser.FindHentai());
+        }
+
+        [Fact]
+        public void FindHentaiTest_Present()
+        {
+            FutariNoMeikyuuOujo();
+            Assert.True(_parser.FindHentai());
+        }
+
+        [Fact]
+        public void FindExternalLinksTest_NotPresent()
+        {
+            FutariNoMeikyuuOujo();
+            Assert.Empty(_parser.FindExternalLinks());
         }
 
         [Theory]

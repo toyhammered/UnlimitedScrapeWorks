@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using UnlimitedScrapeWorks.src.ContractModels.MangaDex;
+using UnlimitedScrapeWorks.src.CustomExceptions.MangaDex;
 
 namespace UnlimitedScrapeWorks.src.Libs.MangaDex
 {
@@ -175,7 +176,7 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
                                                .InnerText.Trim()
                 );
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 totalChapters = 0;
             }
@@ -194,16 +195,23 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
         {
             var results = new Dictionary<string, string>();
 
-            var nodes = _genericParser.CardBodyMangaDetail("Links").SelectNodes("div[2]/ul/li").ToList();
-
-            foreach (var node in nodes)
+            try
             {
-                var linkNode = node.SelectSingleNode("a");
-                results.Add(
-                    linkNode.InnerText,
-                    linkNode.GetAttributeValue("href", null)
-                );
+                var nodes = _genericParser.CardBodyMangaDetail("Links").SelectNodes("div[2]/ul/li").ToList();
+
+                if (nodes.Any())
+                {
+                    foreach (var node in nodes)
+                    {
+                        var linkNode = node.SelectSingleNode("a");
+                        results.Add(
+                            linkNode.InnerText,
+                            linkNode.GetAttributeValue("href", null)
+                        );
+                    }
+                }
             }
+            catch (MissingMangaDetailException) { }
 
             return results;
         }

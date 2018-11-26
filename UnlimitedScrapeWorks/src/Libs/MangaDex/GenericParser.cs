@@ -2,6 +2,7 @@
 using HtmlAgilityPack;
 using System.Linq;
 using System.Collections.Generic;
+using UnlimitedScrapeWorks.src.CustomExceptions.MangaDex;
 
 namespace UnlimitedScrapeWorks.src.Libs.MangaDex
 {
@@ -41,10 +42,18 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
 
         public HtmlNode CardBodyMangaDetail(string detailType)
         {
-            return CardBodyMangaDetails().ChildNodes
-                                         .Where(node => node.Name.Equals("div"))
-                                         .First(node => node.Name.Equals("div") &&
-                                                node.SelectSingleNode("div[contains(@class, 'strong')]").InnerText.Contains(detailType));
+            try
+            {
+                return CardBodyMangaDetails().ChildNodes
+                             .Where(node => node.Name.Equals("div"))
+                             .First(node => node.Name.Equals("div") &&
+                                    node.SelectSingleNode("div[contains(@class, 'strong')]").InnerText.Contains(detailType));
+            }
+            catch (InvalidOperationException)
+            {
+                throw new MissingMangaDetailException(detailType);
+            }
+
         }
 
         public HtmlNode ChaptersNav()

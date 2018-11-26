@@ -23,10 +23,18 @@
     </ItemGroup>
     <ItemGroup>
         <None Remove="Fixtures\MangaDex\ZippyZiggy.html" />
+        <None Remove="Fixtures\MangaDex\KimiJaNakyaDameNanda.html" />
+        <None Remove="Fixtures\MangaDex\FutariNoMeikyuuOujo.html" />
     </ItemGroup>
     <ItemGroup>
         <Content Include="Fixtures\MangaDex\ZippyZiggy.html">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Fixtures\MangaDex\KimiJaNakyaDameNanda.html">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Fixtures\MangaDex\FutariNoMeikyuuOujo.html">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
 </Project>

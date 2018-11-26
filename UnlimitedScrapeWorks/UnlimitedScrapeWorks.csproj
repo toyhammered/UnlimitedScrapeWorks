@@ -17,6 +17,8 @@
         <Folder Include="src\Libs\" />
         <Folder Include="src\Libs\MangaDex\" />
         <Folder Include="src\FileUploads\" />
+        <Folder Include="src\CustomExceptions\" />
+        <Folder Include="src\CustomExceptions\MangaDex\" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.App" />
