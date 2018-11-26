@@ -63,14 +63,22 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
 
         public List<HtmlNode> Chapters()
         {
-            var chapterNodes = Root().SelectSingleNode(@"//div[@id='content']/div[contains(@class, 'edit')]/div")
-                                     .ChildNodes
-                                     .Where(node => node.Name.Equals("div"))
-                                     .ToList();
+            try
+            {
+                var chapterNodes = Root().SelectSingleNode(@"//div[@id='content']/div[contains(@class, 'edit')]/div")
+                         .ChildNodes
+                         .Where(node => node.Name.Equals("div"))
+                         .ToList();
 
-            // Remove the first node because it just holds images and no content
-            chapterNodes.RemoveAt(0);
-            return chapterNodes;
+                // Remove the first node because it just holds images and no content
+                chapterNodes.RemoveAt(0);
+                return chapterNodes;
+            }
+            catch (Exception ex)
+            {
+                return new List<HtmlNode>();
+            }
+
         }
     }
 }

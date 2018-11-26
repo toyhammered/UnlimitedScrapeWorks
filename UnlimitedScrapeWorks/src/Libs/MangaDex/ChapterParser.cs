@@ -61,6 +61,11 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
 
         public async Task Parse(HtmlDocument page)
         {
+            if (MangaTotalChapters == 0)
+            {
+                return;
+            }
+
             var genericParser = new GenericParser(page);
 
             await Task.Run(() =>

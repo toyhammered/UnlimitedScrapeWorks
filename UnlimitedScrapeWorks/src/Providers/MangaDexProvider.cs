@@ -14,6 +14,7 @@ namespace UnlimitedScrapeWorks.src.Providers
     {
         private readonly int START_AMOUNT = 2;
         private readonly int END_AMOUNT = 2;
+        private readonly int BATCH_AMOUNT = 400;
 
         private readonly IMangaDexSite _site;
         private readonly IStorageHelper _storage;
@@ -46,7 +47,7 @@ namespace UnlimitedScrapeWorks.src.Providers
                 }
                 catch (Exception ex)
                 {
-
+                    // Log something here as to why it is being skipped
                 }
             }
 

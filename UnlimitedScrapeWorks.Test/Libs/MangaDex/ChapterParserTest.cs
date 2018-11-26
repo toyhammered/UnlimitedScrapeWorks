@@ -18,10 +18,18 @@ namespace UnlimitedScrapeWorks.Test.Libs.MangaDex
 
         }
 
-        public void ZippyZiggy()
+        private void ZippyZiggy()
         {
             _web.Load(@"Fixtures/MangaDex/ZippyZiggy.html");
             _parser = new ChapterParser(new MangaDexSite(), _web, 2, "zippy-ziggy", 172);
+            // Will need to set this for only certain tests
+            _genericParser = new GenericParser(_web);
+        }
+
+        private void KimiJaNakyaDameNanda()
+        {
+            _web.Load(@"Fixtures/MangaDex/KimiJaNakyaDameNanda.html");
+            _parser = new ChapterParser(new MangaDexSite(), _web, 2001, "kimi-ja-nakya-dame-nanda", 0);
             // Will need to set this for only certain tests
             _genericParser = new GenericParser(_web);
         }
@@ -55,7 +63,7 @@ namespace UnlimitedScrapeWorks.Test.Libs.MangaDex
         }
 
         [Fact]
-        public void FindChapterTest()
+        public void FindChapterTest_Present()
         {
             ZippyZiggy();
             var node = _genericParser.Chapters()[0];
