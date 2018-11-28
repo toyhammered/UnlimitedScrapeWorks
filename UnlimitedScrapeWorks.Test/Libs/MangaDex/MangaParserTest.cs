@@ -36,6 +36,13 @@ namespace UnlimitedScrapeWorks.Test.Libs.MangaDex
             _parser = new MangaParser(_web, 31238);
         }
 
+        // Related in Body (sequels, side stories, etc..)
+        private void Major()
+        {
+            _web.Load(@"Fixtures/MangaDex/Major.html");
+            _parser = new MangaParser(_web, 927);
+        }
+
         [Fact]
         public void FindSlugTest()
         {
@@ -71,6 +78,12 @@ namespace UnlimitedScrapeWorks.Test.Libs.MangaDex
             Assert.Equal("Futari no Meikyuu Oujo", _parser.FindName());
         }
 
+        [Fact]
+        public void FindRelated_Amount()
+        {
+            Major();
+            Assert.Equal(2, _parser.FindRelated().Count);
+        }
         [Fact]
         public void FindAltTitlesTest_CorrectAmount()
         {
@@ -126,7 +139,7 @@ namespace UnlimitedScrapeWorks.Test.Libs.MangaDex
         public void FindPublishStatusTest()
         {
             ZippyZiggy();
-            Assert.Equal("Completed", _parser.FindPublishStatus());
+            Assert.Equal("completed", _parser.FindPublishStatus());
         }
 
         [Fact]

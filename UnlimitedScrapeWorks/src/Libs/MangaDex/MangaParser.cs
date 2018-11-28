@@ -32,6 +32,7 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
                 {
                     Id = Id,
                     Title = SetTitle(),
+                    Related = FindRelated(),
                     AltTitles = FindAltTitles(),
                     GenreTags = FindGenreTags(),
                     Thumbnail = FindThumbnail(),
@@ -75,12 +76,42 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
             };
         }
 
+        public List<MangaTitle> FindRelated()
+        {
+            var relatedTitles = new List<MangaTitle>();
+
+            try
+            {
+                _genericParser.CardBodyMangaDetail("Related").SelectNodes(@"div[2]/ul/li")
+                                           .ToList()
+                                           .ForEach(node =>
+                                           {
+                                               var title = new MangaTitle()
+                                               {
+                                                   Name = FindName(node),
+                                                   Slug = FindSlug(node)
+                                               };
+                                               relatedTitles.Add(title);
+                                           });
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return relatedTitles;
+        }
+
         public string FindName()
         {
             var unformattedName = _genericParser.CardHeader().InnerText;
             return Regex.Replace(unformattedName, @"\s{2,10}H", "").Trim();
         }
 
+        public string FindName(HtmlNode node)
+        {
+            return node.SelectSingleNode("a").GetAttributeValue("title", null);
+        }
 
         public string FindOrigin()
         {
@@ -92,6 +123,20 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
         public string FindSlug()
         {
             return ParsedMangaHref(3);
+        }
+
+        public string FindSlug(HtmlNode node)
+        {
+            try
+            {
+                return node.SelectSingleNode("a").GetAttributeValue("href", null)
+                                                       .Split("/")
+                                                       .Last();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public List<string> FindAltTitles()
@@ -139,7 +184,7 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
             try
             {
                 return _genericParser.CardBodyMangaDetail("Pub. status").SelectSingleNode(@"div[2]")
-                                     .InnerText.Trim();
+                                     .InnerText.Trim().ToLower();
             }
             catch (MissingMangaDetailException)
             {
@@ -212,7 +257,7 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
                    _genericParser.CardBodyMangaDetail("Stats").SelectNodes(@"div[2]/ul/li")
                                                .ToList()
                                                .First(node => node.FirstChild.GetAttributeValue("title", "").Equals("Total chapters"))
-                                               .InnerText.Trim()
+                                               .InnerText.Trim().Replace(",", "")
                 );
             }
             catch (Exception)
@@ -236,19 +281,16 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
 
             try
             {
-                var nodes = _genericParser.CardBodyMangaDetail("Links").SelectNodes("div[2]/ul/li").ToList();
-
-                if (nodes.Any())
-                {
-                    foreach (var node in nodes)
-                    {
-                        var linkNode = node.SelectSingleNode("a");
-                        results.Add(
-                            linkNode.InnerText,
-                            linkNode.GetAttributeValue("href", null)
-                        );
-                    }
-                }
+                _genericParser.CardBodyMangaDetail("Links").SelectNodes("div[2]/ul/li")
+                              .ToList()
+                              .ForEach(node =>
+                              {
+                                  var linkNode = node.SelectSingleNode("a");
+                                  results.Add(
+                                      linkNode.InnerText,
+                                      linkNode.GetAttributeValue("href", null)
+                                  );
+                              });
             }
             catch (MissingMangaDetailException)
             {

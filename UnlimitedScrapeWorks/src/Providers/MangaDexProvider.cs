@@ -42,10 +42,10 @@ namespace UnlimitedScrapeWorks.src.Providers
                     manga = await new MangaParser(page, i).Process();
                     manga.Chapters = await new ChapterParser(_site, page, i, manga.Title.Slug, manga.TotalChapters).Process();
 
-                    await _storage.AddRecord("2-2", manga);
+                    await _storage.AddRecord($"{START_AMOUNT}-{END_AMOUNT}", manga);
                     await _storage.CreateFileCheck(i);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // Log something here as to why it is being skipped
                 }

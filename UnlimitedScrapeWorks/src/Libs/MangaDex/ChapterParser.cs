@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using UnlimitedScrapeWorks.src.ContractModels.MangaDex;
+using UnlimitedScrapeWorks.src.CustomExceptions.MangaDex;
 using UnlimitedScrapeWorks.src.Sites;
 
 namespace UnlimitedScrapeWorks.src.Libs.MangaDex
@@ -36,8 +37,6 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
 
         public async Task<List<MangaChapter>> Process()
         {
-            //return await Task.Run(() => new MangaChapters)
-
             await Parse(FirstPage);
             await ParseAdditionalPages();
 
@@ -72,23 +71,31 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
             {
                 foreach (var chapterNode in genericParser.Chapters())
                 {
-                    var chapter = new MangaChapter()
+                    try
                     {
-                        AltTitles = FindAltTitles(chapterNode),
-                        Volume = FindVolume(chapterNode),
-                        Chapter = FindChapter(chapterNode),
-                        UploadDate = FindUploadDate(chapterNode)
-                    };
+                        var chapter = new MangaChapter()
+                        {
+                            AltTitles = FindAltTitles(chapterNode),
+                            Volume = FindVolume(chapterNode),
+                            Chapter = FindChapter(chapterNode),
+                            UploadDate = FindUploadDate(chapterNode)
+                        };
 
-                    var existingChapterIndex = Chapters.FindIndex(c => c.Chapter.Equals(chapter.Chapter));
+                        // TODO: extract this so it can be reused with chapter.
+                        var existingChapterIndex = Chapters.FindIndex(c => c.Chapter.Equals(chapter.Chapter) && c.Volume.Equals(chapter.Volume));
 
-                    if (existingChapterIndex == -1)
-                    {
-                        Chapters.Add(chapter);
+                        if (existingChapterIndex == -1)
+                        {
+                            Chapters.Add(chapter);
+                        }
+                        else
+                        {
+                            CombineChapters(existingChapterIndex, chapter);
+                        }
                     }
-                    else
+                    catch (InvalidChapterException)
                     {
-                        CombineChapters(existingChapterIndex, chapter);
+
                     }
                 }
             });
@@ -138,7 +145,6 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
 
             Int32.TryParse(volume, out int result);
             parsedVolume = result;
-
             return parsedVolume == 0 ? null : parsedVolume;
         }
 
@@ -151,7 +157,8 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
             catch (Exception)
             {
                 // specifically throw an exception so that this can be skipped.
-                throw new Exception();
+                // Example: 79.2 will be skipped, currently don't support decimals.
+                throw new InvalidChapterException();
             }
         }
 

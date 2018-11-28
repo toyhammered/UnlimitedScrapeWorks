@@ -8,6 +8,8 @@ namespace UnlimitedScrapeWorks.src.ContractModels.MangaDex
         public int Id { get; set; }
 
         public MangaTitle Title { get; set; }
+        public List<MangaTitle> Related { get; set; }
+
         public List<string> AltTitles { get; set; }
         public List<string> GenreTags { get; set; }
 

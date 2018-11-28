@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
 using UnlimitedScrapeWorks.src.ContractModels.MangaDex;
 
 namespace UnlimitedScrapeWorks.src.Libs.MangaDex
@@ -15,9 +16,13 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
         string FindId();
 
         MangaTitle SetTitle();
+        List<MangaTitle> FindRelated();
+
         string FindName();
+        string FindName(HtmlNode node);
         string FindOrigin();
         string FindSlug();
+        string FindSlug(HtmlNode node);
 
         string ParsedMangaHref(int position);
 
