@@ -58,6 +58,9 @@ namespace UnlimitedScrapeWorks.src.Providers
             await _storage.CreateFile(batchAmount);
             Console.WriteLine($"Start: {startTime} - End: {DateTime.UtcNow}");
             Console.WriteLine($"Total: {(startTime - DateTime.UtcNow).TotalSeconds} seconds");
+            _site.COMPLETED_REQUESTS.ForEach(Console.WriteLine);
+            Console.WriteLine($"Total Requests Made: {_site.COMPLETED_REQUESTS.Count}");
+            Console.WriteLine("**************");
             return "Success";
         }
     }

@@ -15,6 +15,7 @@ namespace UnlimitedScrapeWorks.src.Sites
 
         public QueueRequests FIFO_QUEUE { get; set; }
         public QueueResults QUEUE_RESULTS { get; set; }
+        public List<string> COMPLETED_REQUESTS { get; set; }
 
         public MangaDexSite()
         {
@@ -29,6 +30,8 @@ namespace UnlimitedScrapeWorks.src.Sites
                 Manga = new Dictionary<string, HtmlDocument>(),
                 Chapter = new Dictionary<string, HtmlDocument>()
             };
+
+            COMPLETED_REQUESTS = new List<string>();
 
             Retry = 0;
 
@@ -114,6 +117,7 @@ namespace UnlimitedScrapeWorks.src.Sites
                     return await Task.Run(() =>
                     {
                         var page = QUEUE_RESULTS.Manga[key];
+                        COMPLETED_REQUESTS.Add($"Time: {DateTime.UtcNow.ToString()} - Manga: {key}");
                         QUEUE_RESULTS.Manga.Remove(key);
                         return page;
                     });
@@ -133,6 +137,7 @@ namespace UnlimitedScrapeWorks.src.Sites
                     return await Task.Run(() =>
                     {
                         var page = QUEUE_RESULTS.Chapter[key];
+                        COMPLETED_REQUESTS.Add($"Time: {DateTime.UtcNow.ToString()} - Chapter: {key}");
                         QUEUE_RESULTS.Chapter.Remove(key);
                         return page;
                     });
