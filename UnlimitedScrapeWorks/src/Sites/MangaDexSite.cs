@@ -40,7 +40,7 @@ namespace UnlimitedScrapeWorks.src.Sites
             backgroundThread.Start();
         }
 
-        public async Task<HtmlDocument> GetAll(int currentPage)
+        public async Task<HtmlDocument> GetPage(int currentPage)
         {
             var key = $"{currentPage}";
             var task = new Task(async () =>

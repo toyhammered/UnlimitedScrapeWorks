@@ -8,6 +8,6 @@ namespace UnlimitedScrapeWorks.src.Providers
 {
     public interface IMangaDexProvider
     {
-        Task<string> GetAll();
+        Task<string> PostRange(int startAmount, int endAmount, int batchAmount);
     }
 }

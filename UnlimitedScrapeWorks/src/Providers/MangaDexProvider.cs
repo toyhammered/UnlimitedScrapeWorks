@@ -13,10 +13,6 @@ namespace UnlimitedScrapeWorks.src.Providers
 {
     public class MangaDexProvider : IMangaDexProvider
     {
-        private readonly int START_AMOUNT = 9;
-        private readonly int END_AMOUNT = 9;
-        //private readonly int BATCH_AMOUNT = 400;
-
         private readonly IMangaDexSite _site;
         private readonly IStorageHelper _storage;
 
@@ -26,11 +22,11 @@ namespace UnlimitedScrapeWorks.src.Providers
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));
         }
 
-        public async Task<string> GetAll()
+        public async Task<string> PostRange(int startAmount, int endAmount, int batchAmount)
         {
             var startTime = DateTime.UtcNow;
             var throttler = new SemaphoreSlim(2, 4);
-            var mangaIds = Enumerable.Range(START_AMOUNT, END_AMOUNT - START_AMOUNT + 1);
+            var mangaIds = Enumerable.Range(startAmount, endAmount - startAmount + 1);
             var TaskList = mangaIds.Select(async mangaId =>
             {
                 await throttler.WaitAsync();
@@ -39,7 +35,7 @@ namespace UnlimitedScrapeWorks.src.Providers
                 try
                 {
                     //TODO: figure out how to loop based on number and batch by 400
-                    var page = await _site.GetAll(mangaId);
+                    var page = await _site.GetPage(mangaId);
 
                     manga = await new MangaParser(page, mangaId).Process();
                     manga.Chapters = await new ChapterParser(_site, page, mangaId, manga.Title.Slug, manga.TotalChapters).Process();
@@ -59,7 +55,7 @@ namespace UnlimitedScrapeWorks.src.Providers
             });
 
             await Task.WhenAll(TaskList);
-            await _storage.CreateFile();
+            await _storage.CreateFile(batchAmount);
             Console.WriteLine($"Start: {startTime} - End: {DateTime.UtcNow}");
             Console.WriteLine($"Total: {(startTime - DateTime.UtcNow).TotalSeconds} seconds");
             return "Success";

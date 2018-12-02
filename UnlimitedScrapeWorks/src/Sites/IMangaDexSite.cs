@@ -6,7 +6,7 @@ namespace UnlimitedScrapeWorks.src.Sites
 {
     public interface IMangaDexSite
     {
-        Task<HtmlDocument> GetAll(int mangaId);
+        Task<HtmlDocument> GetPage(int mangaId);
         Task<HtmlDocument> GetExtraPages(int mangaId, string mangaSlug, int currentPage);
     }
 }

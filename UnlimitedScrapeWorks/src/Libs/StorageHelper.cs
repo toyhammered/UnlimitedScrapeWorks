@@ -27,9 +27,8 @@ namespace UnlimitedScrapeWorks.src.Libs
             });
         }
 
-        public async Task CreateFile()
+        public async Task CreateFile(int batchAmount)
         {
-            int batchAmount = 3;
             int batchCount = (MangaDexRecords.Count + batchAmount - 1) / batchAmount;
 
             for (int i = 1; i <= batchCount; i++)
