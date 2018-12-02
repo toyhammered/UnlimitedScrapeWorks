@@ -78,6 +78,7 @@ namespace UnlimitedScrapeWorks.src.Sites
             {
                 // sleep or delay.
                 Thread.Sleep(1000);
+                Console.WriteLine($"GetThrottled: Manga - {FIFO_QUEUE.Manga.Count}. Chapter - {FIFO_QUEUE.Chapter.Count}.");
 
                 if (FIFO_QUEUE.Chapter.Count > 0)
                 {

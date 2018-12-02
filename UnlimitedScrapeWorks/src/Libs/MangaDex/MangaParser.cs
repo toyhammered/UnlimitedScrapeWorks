@@ -94,10 +94,7 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
                                                relatedTitles.Add(title);
                                            });
             }
-            catch (Exception ex)
-            {
-
-            }
+            catch (Exception) { }
 
             return relatedTitles;
         }
@@ -296,7 +293,6 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
             {
 
             }
-
 
             return results;
         }

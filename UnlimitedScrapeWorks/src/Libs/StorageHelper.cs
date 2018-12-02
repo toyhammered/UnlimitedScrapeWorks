@@ -9,42 +9,34 @@ namespace UnlimitedScrapeWorks.src.Libs
     public class StorageHelper : IStorageHelper
     {
         private readonly IFileHelper _file;
-        public Dictionary<string, List<MangaDexMangaResponse>> MangaDexRecords { get; set; }
+        public List<MangaDexMangaResponse> MangaDexRecords { get; set; }
 
         public StorageHelper(IFileHelper file)
         {
             _file = file ?? throw new ArgumentNullException(nameof(file));
-            MangaDexRecords = new Dictionary<string, List<MangaDexMangaResponse>>();
+            MangaDexRecords = new List<MangaDexMangaResponse>();
         }
 
         // We can overload this if we need to use other sites.
-        public async Task AddRecord(string key, MangaDexMangaResponse manga)
+        public async Task AddRecord(MangaDexMangaResponse manga)
         {
+
             await Task.Run(() =>
             {
-                if (MangaDexRecords.ContainsKey(key))
-                {
-                    MangaDexRecords[key].Add(manga);
-                }
-                else
-                {
-                    MangaDexRecords[key] = new List<MangaDexMangaResponse> { manga };
-                }
+                MangaDexRecords.Add(manga);
             });
         }
 
-        public async Task CreateFileCheck(int position)
+        public async Task CreateFile()
         {
-            foreach (var key in MangaDexRecords.Keys)
+            int batchAmount = 3;
+            int batchCount = (MangaDexRecords.Count + batchAmount - 1) / batchAmount;
+
+            for (int i = 1; i <= batchCount; i++)
             {
-                // key is 1-40 so if position is greater that means
-                // everything has been added (hopefully).
-                if (position >= Convert.ToInt32(key.Split("-").Last()))
-                {
-                    await _file.SaveMangaRecords(MangaDexRecords[key], key);
-                    MangaDexRecords.Remove(key);
-                    return;
-                }
+                int skipAmount = batchAmount * (i - 1);
+                var batch = MangaDexRecords.Skip(skipAmount).Take(batchAmount).ToList();
+                await _file.SaveMangaRecords(batch, $"manga-batch-{i}");
             }
         }
     }

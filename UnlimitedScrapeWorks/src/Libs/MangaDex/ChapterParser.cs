@@ -50,12 +50,14 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
                 return;
             }
 
-            for (int i = 1; i <= AdditionalPages; i++)
+            var chapterIds = Enumerable.Range(2, AdditionalPages);
+            var TaskList = chapterIds.Select(async chapterId =>
             {
-                // need to add 1 to the page for the correct "ID"
-                var page = await _site.GetExtraPages(MangaId, MangaTitleSlug, i + 1);
+                var page = await _site.GetExtraPages(MangaId, MangaTitleSlug, chapterId);
                 await Parse(page);
-            }
+            });
+
+            await Task.WhenAll(TaskList);
         }
 
         public async Task Parse(HtmlDocument page)
@@ -92,6 +94,8 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
                         {
                             CombineChapters(existingChapterIndex, chapter);
                         }
+
+                        Console.WriteLine($"Completed -- Manga: {MangaId} - Chapter: {chapter.Chapter}. Task: {Task.CurrentId}");
                     }
                     catch (InvalidChapterException)
                     {
@@ -105,7 +109,7 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
         {
             foreach (var altTitle in chapter.AltTitles)
             {
-                Chapters[existingChapterIndex].AltTitles.Add(altTitle.Key, altTitle.Value);
+                Chapters[existingChapterIndex].AltTitles.TryAdd(altTitle.Key, altTitle.Value);
             }
         }
 
@@ -115,6 +119,7 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
             var language = FindLanguage(node);
             var title = ChapterRowDataValue(node, "title");
 
+            title = string.IsNullOrWhiteSpace(title) ? null : title;
             altTitles.Add(language, title);
 
             return altTitles;
