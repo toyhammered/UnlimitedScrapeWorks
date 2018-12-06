@@ -10,11 +10,12 @@ namespace UnlimitedScrapeWorks.src.Libs
 {
     public class FileHelper : IFileHelper
     {
-        public string TimeStamp = $"{DateTime.Now:yyyy-MM-dd_hh-mm-ss}";
+        public string TimeStamp { get; }
         public string FilePath { get; }
 
         public FileHelper()
         {
+            TimeStamp = $"{DateTime.Now:yyyy-MM-dd_hh-mm-ss}";
             FilePath = Path.Combine(Directory.GetCurrentDirectory(), "src/FileUploads/", TimeStamp);
             Directory.CreateDirectory(FilePath);
 

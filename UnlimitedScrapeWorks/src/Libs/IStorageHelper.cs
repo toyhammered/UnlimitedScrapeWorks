@@ -7,6 +7,6 @@ namespace UnlimitedScrapeWorks.src.Libs
     public interface IStorageHelper
     {
         Task AddRecord(MangaDexMangaResponse manga);
-        Task CreateFile(int batchAmount);
+        Task CreateAndUploadFiles(int batchAmount);
     }
 }

@@ -77,11 +77,10 @@ namespace UnlimitedScrapeWorks.src.Sites
 
         private void GetThrottled()
         {
-            while (Retry < 100)
+            while (Retry < 10)
             {
                 // sleep or delay.
                 Thread.Sleep(1000);
-                Console.WriteLine($"GetThrottled: Manga - {FIFO_QUEUE.Manga.Count}. Chapter - {FIFO_QUEUE.Chapter.Count}.");
 
                 if (FIFO_QUEUE.Chapter.Count > 0)
                 {

@@ -34,15 +34,12 @@ namespace UnlimitedScrapeWorks.src.Providers
 
                 try
                 {
-                    //TODO: figure out how to loop based on number and batch by 400
                     var page = await _site.GetPage(mangaId);
 
                     manga = await new MangaParser(page, mangaId).Process();
                     manga.Chapters = await new ChapterParser(_site, page, mangaId, manga.Title.Slug, manga.TotalChapters).Process();
 
                     await _storage.AddRecord(manga);
-                    Console.WriteLine($"{DateTime.UtcNow} - Completed Manga: {mangaId}.");
-                    //await _storage.CreateFileCheck(i);
                 }
                 catch (Exception)
                 {
@@ -55,7 +52,7 @@ namespace UnlimitedScrapeWorks.src.Providers
             });
 
             await Task.WhenAll(TaskList);
-            await _storage.CreateFile(batchAmount);
+            await _storage.CreateAndUploadFiles(batchAmount);
             Console.WriteLine($"Start: {startTime} - End: {DateTime.UtcNow}");
             Console.WriteLine($"Total: {(startTime - DateTime.UtcNow).TotalSeconds} seconds");
             _site.COMPLETED_REQUESTS.ForEach(Console.WriteLine);

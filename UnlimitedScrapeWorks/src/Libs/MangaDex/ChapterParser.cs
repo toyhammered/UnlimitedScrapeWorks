@@ -94,8 +94,6 @@ namespace UnlimitedScrapeWorks.src.Libs.MangaDex
                         {
                             CombineChapters(existingChapterIndex, chapter);
                         }
-
-                        Console.WriteLine($"Completed -- Manga: {MangaId} - Chapter: {chapter.Chapter}. Task: {Task.CurrentId}");
                     }
                     catch (InvalidChapterException)
                     {
