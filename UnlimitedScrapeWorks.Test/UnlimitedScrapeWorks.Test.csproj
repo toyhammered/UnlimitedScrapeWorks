@@ -15,7 +15,6 @@
         <ProjectReference Include="..\UnlimitedScrapeWorks\UnlimitedScrapeWorks.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="Providers\" />
         <Folder Include="Fixtures\" />
         <Folder Include="Fixtures\MangaDex\" />
         <Folder Include="Libs\" />
@@ -34,6 +33,9 @@
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="Fixtures\MangaDex\FutariNoMeikyuuOujo.html">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Fixtures\MangaDex\Major.html">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>

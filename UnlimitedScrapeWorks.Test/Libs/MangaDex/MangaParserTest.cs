@@ -2,6 +2,8 @@
 using Xunit;
 using HtmlAgilityPack;
 using UnlimitedScrapeWorks.src.Libs.MangaDex;
+using System.Collections.Generic;
+using UnlimitedScrapeWorks.src.ContractModels.MangaDex;
 
 namespace UnlimitedScrapeWorks.Test.Libs.MangaDex
 {
