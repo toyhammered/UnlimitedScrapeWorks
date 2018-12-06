@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.1</TargetFramework>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
+        <PackageReference Include="xunit" Version="2.3.1" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+        <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
+        <PackageReference Include="HtmlAgilityPack" Version="1.8.9" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\UnlimitedScrapeWorks\UnlimitedScrapeWorks.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="Providers\" />
+        <Folder Include="Fixtures\" />
+        <Folder Include="Fixtures\MangaDex\" />
+        <Folder Include="Libs\" />
+        <Folder Include="Libs\MangaDex\" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Remove="Fixtures\MangaDex\ZippyZiggy.html" />
+        <None Remove="Fixtures\MangaDex\KimiJaNakyaDameNanda.html" />
+        <None Remove="Fixtures\MangaDex\FutariNoMeikyuuOujo.html" />
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="Fixtures\MangaDex\ZippyZiggy.html">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Fixtures\MangaDex\KimiJaNakyaDameNanda.html">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Fixtures\MangaDex\FutariNoMeikyuuOujo.html">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+</Project>
