@@ -20,8 +20,6 @@ namespace UnlimitedScrapeWorks.src.Libs.Aws
         {
             config.RegionEndpoint = bucketRegion;
             _client = new AmazonS3Client(
-                DotNetEnv.Env.GetString("ACCESS_KEY"),
-                DotNetEnv.Env.GetString("SECRET_KEY"),
                 config
             );
         }
