@@ -23,24 +23,43 @@ namespace UnlimitedScrapeWorks.src.Libs
 
         public async Task SaveMangaRecords(List<MangaDexMangaResponse> records, string key)
         {
-            using (var sw = new StreamWriter(Path.Combine(FilePath, $"{key}.json"), true))
+            using (var sw = new StreamWriter(Path.Combine(FilePath, $"{key}.ndjson"), true))
             {
-                await sw.WriteAsync(JsonConvert.SerializeObject(records, JsonSettings()));
+                await ToNewLineDelimitedJson(sw, records);
+                //await sw.WriteAsync(JsonConvert.SerializeObject(records, JsonSettings()));
                 sw.Close();
             }
         }
 
-        private JsonSerializerSettings JsonSettings()
+        private async Task ToNewLineDelimitedJson(TextWriter textWriter, List<MangaDexMangaResponse> records)
         {
-            return new JsonSerializerSettings
+            var serializer = JsonSerializer.CreateDefault();
+
+            await Task.Run(() =>
             {
-                ContractResolver = new DefaultContractResolver
+                foreach (var record in records)
                 {
-                    NamingStrategy = new SnakeCaseNamingStrategy()
-                },
-                Formatting = Formatting.Indented
-            };
+                    using (var writer = new JsonTextWriter(textWriter) { Formatting = Formatting.None, CloseOutput = false })
+                    {
+                        serializer.Serialize(writer, record);
+                    }
+
+                    textWriter.Write("\n");
+                }
+            });
         }
+
+        //private JsonSerializerSettings JsonSettings()
+        //{
+        //    return new JsonSerializerSettings
+        //    {
+        //        ContractResolver = new DefaultContractResolver
+        //        {
+        //            NamingStrategy = new SnakeCaseNamingStrategy()
+        //        },
+        //        Formatting = Formatting.Indented
+        //    };
+        //}
     }
 }
 
