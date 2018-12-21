@@ -10,6 +10,6 @@ namespace UnlimitedScrapeWorks.src.Sites
         Task<HtmlDocument> GetPage(int mangaId);
         Task<HtmlDocument> GetExtraPages(int mangaId, string mangaSlug, int currentPage);
 
-        List<string> COMPLETED_REQUESTS { get; set; }
+        int TOTAL_REQUESTS { get; set; }
     }
 }
