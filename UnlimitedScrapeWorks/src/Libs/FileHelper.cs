@@ -33,7 +33,7 @@ namespace UnlimitedScrapeWorks.src.Libs
 
         private async Task ToNewLineDelimitedJson(TextWriter textWriter, List<MangaDexMangaResponse> records)
         {
-            var serializer = JsonSerializer.CreateDefault();
+            var serializer = JsonSerializer.Create(JsonSettings());
 
             await Task.Run(() =>
             {
@@ -49,17 +49,17 @@ namespace UnlimitedScrapeWorks.src.Libs
             });
         }
 
-        //private JsonSerializerSettings JsonSettings()
-        //{
-        //    return new JsonSerializerSettings
-        //    {
-        //        ContractResolver = new DefaultContractResolver
-        //        {
-        //            NamingStrategy = new SnakeCaseNamingStrategy()
-        //        },
-        //        Formatting = Formatting.Indented
-        //    };
-        //}
+        private JsonSerializerSettings JsonSettings()
+        {
+            return new JsonSerializerSettings
+            {
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new SnakeCaseNamingStrategy()
+                },
+                Formatting = Formatting.None,
+            };
+        }
     }
 }
 
